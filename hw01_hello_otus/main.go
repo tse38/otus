@@ -1,9 +1,9 @@
 package main
 
-// ver 08.03.2021 22:01
+// ver 08.03.2021 23.18
 import (
 	"fmt"
-	"github.com/tse38/hw_test/hw01_hello_otus/stringutil"
+	"github.com/tse38/otus/hw01_hello_otus/stringutil"
 )
 
 func main() {
