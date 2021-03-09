@@ -4,7 +4,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/tse38/otus/hw01_hello_otus/stringutil"
+	"golang.org/x/example/stringutil"
 )
 
 func main() {
