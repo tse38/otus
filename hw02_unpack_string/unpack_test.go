@@ -16,8 +16,11 @@ func TestUnpackOkString(t *testing.T) {
 		{input: "abccd", expected: "abccd"},
 		{input: "", expected: ""},
 		{input: "aaa0b", expected: "aab"},
-		{"Ва3ся Пупкин & ᾋ0ß♫2 & doc.Martin4", "Вааася Пупкин & ß♫♫ & doc.Martinnnn"},
 		{"a4b_3c2d5e", "aaaab___ccddddde"},
+		{"d\n5xyz", "d\n\n\n\n\nxyz"}, // спец.символ "перевод строки"
+		{"d\\5xyz", "d\\\\\\\\\\xyz"},
+		{"d\t5xyz", "d\t\t\t\t\txyz"},
+		{"Ва3ся Пупкин & ᾋ0ß♫2 & doc.Martin4", "Вааася Пупкин & ß♫♫ & doc.Martinnnn"},
 		// uncomment if task with asterisk completed
 		// {input: `qwe\4\5`, expected: `qwe45`},
 		// {input: `qwe\45`, expected: `qwe44444`},

@@ -8,15 +8,31 @@ import (
 
 var ErrInvalidString = errors.New("invalid string")
 
+func setTypeSimv(simv rune) int {
+	var typeS int
+	switch { // определяем тип текущего символа в строке
+	case unicode.IsPrint(simv) && !unicode.IsDigit(simv):
+		typeS = 'c' // печатный символ и не цифра
+	case unicode.IsDigit(simv):
+		typeS = 'd' // цифра
+	// case unicode.IsLetter(t):  rz[i].ty='c'  // буква
+	case unicode.IsControl(simv):
+		typeS = 's' // спец.символ - к сожалению, слишком много
+	default:
+		typeS = '.'
+	}
+	return typeS
+}
+
 func Unpack(s string) (string, error) {
 	var StrigConv strings.Builder // инициализируем строку возврата
 	// исключительные случаи
 	if len(s) == 0 {
 		return StrigConv.String(), nil
 	} // нулевая длина
-	if s[0] >= '0' && s[0] <= '9' {
+	if s[0] >= '0' && s[0] <= '9' { // первый символ - цифра
 		return StrigConv.String(), ErrInvalidString
-	} // первый символ - цифра
+	}
 
 	// Для доп.задания - ловим \, предшествующий цифре
 	//   (пока погодим)
@@ -31,20 +47,9 @@ func Unpack(s string) (string, error) {
 	var i, typePrevSimv int      // счетчик, тип предыдущего символа
 
 	for _, simv := range s {
-		switch { // определяем тип текущего символа в строке
-		case unicode.IsPrint(simv) && !unicode.IsDigit(simv):
-			rz[i].typeSimv = 'c' // печатный символ и не цифра
-		case unicode.IsDigit(simv):
-			rz[i].typeSimv = 'd' // цифра
-		// case unicode.IsLetter(t):  rz[i].ty='c'  // буква
-		case unicode.IsControl(simv):
-			rz[i].typeSimv = 's' // спец.символ - к сожалению, слишком много
-		default:
-			{
-				// rz[i].typeSimv = '.'
-				// pr_simv_no_dop = 1
-				return StrigConv.String(), ErrInvalidString // в строке недопустимый символ, возврат с ошибкой
-			}
+		rz[i].typeSimv = setTypeSimv(simv) // определяем тип текущего символа (печатный, число, спец.символ)
+		if rz[i].typeSimv == '.' {
+			return StrigConv.String(), ErrInvalidString // в строке недопустимый символ, возврат с ошибкой
 		}
 
 		rz[i].ch = simv
