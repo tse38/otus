@@ -1,5 +1,6 @@
 module github.com/tse38/otus/hw02_unpack_string
 
+
 go 1.16
 
 require (
