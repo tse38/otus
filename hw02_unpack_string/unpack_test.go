@@ -2,12 +2,11 @@ package hw02unpackstring
 
 import (
 	"errors"
-	"testing"
-
 	"github.com/stretchr/testify/require"
+	"testing"
 )
 
-func TestUnpack(t *testing.T) {
+func TestUnpackOkString(t *testing.T) {
 	tests := []struct {
 		input    string
 		expected string
@@ -44,4 +43,9 @@ func TestUnpackInvalidString(t *testing.T) {
 			require.Truef(t, errors.Is(err, ErrInvalidString), "actual error %q", err)
 		})
 	}
+}
+
+func TestUnpack(t *testing.T) {
+	TestUnpackOkString(t)
+	TestUnpackInvalidString(t)
 }
