@@ -23,49 +23,47 @@ func Unpack(s string) (string, error) {
 
 	// структура для разбора строки
 	type razbor struct {
-		ch        rune // символ
-		type_simv int  // тип
-		len       int  // кол-во повторений
+		ch       rune // символ
+		typeSimv int  // тип
+		len      int  // кол-во повторений
 	}
 	rz := make([]razbor, len(s)) // количество элементов равно длине строки в байтах (а не в рунах)
-	var i, type_prev_simv int    // счетчик, тип предыдущего символа
+	var i, typePrevSimv int      // счетчик, тип предыдущего символа
 
 	for _, simv := range s {
-
 		switch { // определяем тип текущего символа в строке
 		case unicode.IsPrint(simv) && !unicode.IsDigit(simv):
-			rz[i].type_simv = 'c' // печатный символ и не цифра
+			rz[i].typeSimv = 'c' // печатный символ и не цифра
 		case unicode.IsDigit(simv):
-			rz[i].type_simv = 'd' // цифра
-		//case unicode.IsLetter(t):  rz[i].ty='c'  // буква
+			rz[i].typeSimv = 'd' // цифра
+		// case unicode.IsLetter(t):  rz[i].ty='c'  // буква
 		case unicode.IsControl(simv):
-			rz[i].type_simv = 's' // спец.символ - к сожалению, слишком много
+			rz[i].typeSimv = 's' // спец.символ - к сожалению, слишком много
 		default:
 			{
-				//rz[i].type_simv = '.'
-				//pr_simv_no_dop = 1
+				// rz[i].typeSimv = '.'
+				// pr_simv_no_dop = 1
 				return StrigConv.String(), ErrInvalidString // в строке недопустимый символ, возврат с ошибкой
 			}
 		}
 
 		rz[i].ch = simv
-		if rz[i].type_simv == 'c' || rz[i].type_simv == 's' {
+		if rz[i].typeSimv == 'c' || rz[i].typeSimv == 's' {
 			rz[i].len = 1
 		} // кол-во повторений (инициализация)
 
 		// далее проверяем на 2 подряд цифры, в случае обнаружения возврат
-		if i > 0 && rz[i].type_simv == 'd' && type_prev_simv == 'd' {
+		if i > 0 && rz[i].typeSimv == 'd' && typePrevSimv == 'd' {
 			return StrigConv.String(), ErrInvalidString
 		}
 
-		if i > 0 && rz[i].type_simv == 'd' && (rz[i-1].type_simv == 'c' || rz[i-1].type_simv == 's') {
+		if i > 0 && rz[i].typeSimv == 'd' && (rz[i-1].typeSimv == 'c' || rz[i-1].typeSimv == 's') {
 			rz[i-1].len = (int)(rz[i].ch - '0')
-			type_prev_simv = 'd'
+			typePrevSimv = 'd'
 		} else {
-			type_prev_simv = rz[i].type_simv
+			typePrevSimv = rz[i].typeSimv
 			i++
 		}
-
 	}
 
 	//	fmt.Printf("<")
