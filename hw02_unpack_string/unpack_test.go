@@ -12,7 +12,7 @@ func TestUnpackOkString(t *testing.T) {
 		input    string
 		expected string
 	}{
-		{input: "a4bc2d5e", expected: "aaaabccddddde"},
+		{input: "a4bc2d4e", expected: "aaaabccdddde"},
 		{input: "abccd", expected: "abccd"},
 		{input: "", expected: ""},
 		{input: "aaa0b", expected: "aab"},

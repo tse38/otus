@@ -34,8 +34,7 @@ func Unpack(s string) (string, error) {
 		return StrigConv.String(), ErrInvalidString
 	}
 
-	// Для доп.задания - ловим \, предшествующий цифре
-	//   (пока погодим)
+	// Для доп.задания - ловим \, предшествующий цифре -   (пока погодим)
 
 	// структура для разбора строки
 	type razbor struct {
