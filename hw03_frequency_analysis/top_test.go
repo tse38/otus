@@ -87,7 +87,7 @@ func TestTop10(t *testing.T) {
 	textLarge := ReadFile("Билет_UTF8.txt")
 	t.Run("positive test large text", func(t *testing.T) {
 		expected := []string{
-			"гудмэн", "сказал", "мелит", "транай", "транае", "чтобы", "гудмэна", "жанна", "когда", "человек", // 4
+			"гудмэн", "сказал", "мелит", "транай", "транае", "чтобы", "жанна", "гудмэна", "когда", "может", // 4
 		}
 		require.Equal(t, expected, Top10(&textLarge, 5))
 
