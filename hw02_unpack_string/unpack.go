@@ -50,11 +50,8 @@ func Unpack(s string) (string, error) {
 		if rz[i].typeSimv == '.' {
 			return StrigConv.String(), ErrInvalidString // в строке недопустимый символ, возврат с ошибкой
 		}
-
 		rz[i].ch = simv
-		if rz[i].typeSimv == 'c' || rz[i].typeSimv == 's' {
-			rz[i].len = 1
-		} // кол-во повторений (инициализация)
+		rz[i].len = 1 // кол-во повторений (инициализация)
 
 		// далее проверяем на 2 подряд цифры, в случае обнаружения возврат
 		if i > 0 && rz[i].typeSimv == 'd' && typePrevSimv == 'd' {
