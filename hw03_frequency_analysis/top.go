@@ -46,6 +46,7 @@ func Top10(textIn *string, lenMin int) []string {
 		slovo string
 		kolvo int
 	}
+
 	sortSlovar := make([]tSortSlovar, len(mapSlovar))
 
 	iNew := 0

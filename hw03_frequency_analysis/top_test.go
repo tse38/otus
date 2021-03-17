@@ -85,7 +85,7 @@ func TestTop10(t *testing.T) {
 
 	// тест большого файла, при этом в подсчете не учитываются слова длиной менее 4 символов
 	textLarge := ReadFile("Билет_UTF8.txt")
-	t.Run("positive test 2", func(t *testing.T) {
+	t.Run("positive test large text", func(t *testing.T) {
 		expected := []string{
 			"гудмэн", "сказал", "мелит", "транай", "транае", "чтобы", "гудмэна", "жанна", "когда", "человек", // 4
 		}
