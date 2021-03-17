@@ -2,9 +2,10 @@ package hw03frequencyanalysis
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/require"
 	"io/ioutil"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 // Change to true if needed.
@@ -90,12 +91,11 @@ func TestTop10(t *testing.T) {
 			"гудмэн", "сказал", "мелит", "транай", "транае", "чтобы", "жанна", "гудмэна", "когда", "может", // 4
 		}
 		require.Equal(t, expected, Top10(&textLarge, 5))
-
 	})
 }
 
 func ReadFile(path string) string {
-	//path := "Билет_UTF8.fb2"
+	// path := "Билет_UTF8.fb2"
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		fmt.Println(err)
