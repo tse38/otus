@@ -1,11 +1,27 @@
 package hw03frequencyanalysis
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 	"unicode"
 	"unicode/utf8"
 )
+
+var textOut strings.Builder // инициализация строки
+func clearString(textIn *string) {
+	var chPrev rune
+	for _, ch := range *textIn {
+		if ch == '.' || ch == ',' || ch == '!' || ch == '"' || ch == ':' || ch == '\n' || ch == '\t' {
+			ch = ' ' // замена знаков препинания на пробел
+		}
+		if !(ch == ' ' && chPrev == ' ') { // удаление лишних пробелов
+			textOut.WriteRune(unicode.To(unicode.LowerCase, ch)) // заодно преобразуем в нижний регистр
+		}
+		chPrev = ch
+	}
+	// return
+}
 
 func Top10(textIn *string, lenMin int) []string {
 	var r []string
@@ -17,19 +33,10 @@ func Top10(textIn *string, lenMin int) []string {
 	} // пусто
 
 	// Очищаем текст от знаков препинания, переносов и табуляций
-	var textOut strings.Builder // инициализация строки
-	var chPrev rune
-	for _, ch := range *textIn {
-		if ch == '.' || ch == ',' || ch == '!' || ch == '"' || ch == ':' || ch == '\n' || ch == '\t' {
-			ch = ' ' // замена знаков препинания на пробел
-		}
-		if !(ch == ' ' && chPrev == ' ') { // удаление лишних пробелов
-			textOut.WriteRune(unicode.To(unicode.LowerCase, ch)) // заодно преобразуем в нижний регистр
-		}
-		chPrev = ch
-	}
+	clearString(textIn)
+
 	//  получена строка, очищенная от знаков препинания, переводов строки, табуляций
-	//	fmt.Printf("\n%s",textOut.String())
+	fmt.Printf("\n%s", textOut.String())
 
 	stroki := strings.Split(textOut.String(), " ") // получаем массив слов
 
