@@ -1,13 +1,14 @@
 package hw03frequencyanalysis
 
 import (
+	"io/ioutil"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 )
 
 // Change to true if needed.
-var taskWithAsteriskIsCompleted = false
+var taskWithAsteriskIsCompleted = true
 
 var text = `Как видите, он  спускается  по  лестнице  вслед  за  своим
 	другом   Кристофером   Робином,   головой   вниз,  пересчитывая
@@ -44,8 +45,9 @@ var text = `Как видите, он  спускается  по  лестни�
 		В этот вечер...`
 
 func TestTop10(t *testing.T) {
+	textNull := ""
 	t.Run("no words in empty string", func(t *testing.T) {
-		require.Len(t, Top10(""), 0)
+		require.Len(t, Top10(textNull, 0), 0)
 	})
 
 	t.Run("positive test", func(t *testing.T) {
@@ -62,7 +64,7 @@ func TestTop10(t *testing.T) {
 				"кристофер", // 4
 				"не",        // 4
 			}
-			require.Equal(t, expected, Top10(text))
+			require.Equal(t, expected, Top10(text, 0))
 		} else {
 			expected := []string{
 				"он",        // 8
@@ -76,7 +78,35 @@ func TestTop10(t *testing.T) {
 				"не",        // 4
 				"то",        // 4
 			}
-			require.Equal(t, expected, Top10(text))
+			require.Equal(t, expected, Top10(text, 0))
 		}
 	})
+
+	// тест большого файла, при этом в подсчете не учитываются слова длиной менее 4 символов
+	fileName := []string{"Билет_UTF8.txt", "Билет_UTF8.txt2"}
+	for _, fl := range fileName {
+		textLarge, err := ReadFile(t, fl)
+		if err != nil {
+			t.Run("external file: test ignore (no open file)", func(t *testing.T) {
+				require.Error(t, err, "не удалось открыть файл")
+			})
+		} else {
+			t.Run("external file: positive test", func(t *testing.T) {
+				expected := []string{
+					"гудмэн", "сказал", "мелит", "транай", "транае", "чтобы", "жанна", "гудмэна", "когда", "может", // 4
+				}
+				require.Equal(t, expected, Top10(textLarge, 5))
+			})
+		}
+	}
+}
+
+func ReadFile(t *testing.T, path string) (string, error) {
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		//	fmt.Println("Не могу открыть файл",err,t)
+		return "", err
+	}
+	text := string(data)
+	return text, nil
 }
