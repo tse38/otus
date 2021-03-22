@@ -87,11 +87,11 @@ func TestTop10(t *testing.T) {
 	for _, fl := range fileName {
 		textLarge, err := ReadFile(t, fl)
 		if err != nil {
-			t.Run("test ignore (no open file)", func(t *testing.T) {
+			t.Run("external file: test ignore (no open file)", func(t *testing.T) {
 				require.Error(t, err, "не удалось открыть файл")
 			})
 		} else {
-			t.Run("positive test large text", func(t *testing.T) {
+			t.Run("external file: positive test", func(t *testing.T) {
 				expected := []string{
 					"гудмэн", "сказал", "мелит", "транай", "транае", "чтобы", "жанна", "гудмэна", "когда", "может", // 4
 				}

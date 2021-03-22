@@ -12,7 +12,8 @@ func clearString(textIn string) string {
 	var textOut strings.Builder // инициализация строки
 	var chPrev rune
 	for _, ch := range textIn {
-		if ch == '.' || ch == ',' || ch == '!' || ch == '"' || ch == ':' || ch == '\n' || ch == '\t' {
+		switch ch {
+		case '.', ',', '!', '"', ':', '\n', '\t':
 			ch = ' ' // замена знаков препинания на пробел
 		}
 		if !(ch == ' ' && chPrev == ' ') { // удаление лишних пробелов
