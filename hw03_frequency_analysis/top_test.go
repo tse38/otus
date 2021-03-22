@@ -1,7 +1,6 @@
 package hw03frequencyanalysis
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/require"
 	"io/ioutil"
 	"testing"
@@ -44,11 +43,10 @@ var text = `Как видите, он  спускается  по  лестни�
 	посидеть у огня и послушать какую-нибудь интересную сказку.
 		В этот вечер...`
 
-var textNull = ""
-
 func TestTop10(t *testing.T) {
+	var textNull = ""
 	t.Run("no words in empty string", func(t *testing.T) {
-		require.Len(t, Top10(&textNull, 0), 0)
+		require.Len(t, Top10(textNull, 0), 0)
 	})
 
 	t.Run("positive test", func(t *testing.T) {
@@ -65,7 +63,7 @@ func TestTop10(t *testing.T) {
 				"кристофер", // 4
 				"не",        // 4
 			}
-			require.Equal(t, expected, Top10(&text, 0))
+			require.Equal(t, expected, Top10(text, 0))
 		} else {
 			expected := []string{
 				"он",        // 8
@@ -79,28 +77,34 @@ func TestTop10(t *testing.T) {
 				"не",        // 4
 				"то",        // 4
 			}
-			require.Equal(t, expected, Top10(&text, 0))
+			require.Equal(t, expected, Top10(text, 0))
 		}
 	})
 
 	// тест большого файла, при этом в подсчете не учитываются слова длиной менее 4 символов
-	textLarge := ReadFile("Билет_UTF8.txt")
-	t.Run("positive test large text", func(t *testing.T) {
-		expected := []string{
-			"гудмэн", "сказал", "мелит", "транай", "транае", "чтобы", "жанна", "гудмэна", "когда", "может", // 4
-		}
-		require.Equal(t, expected, Top10(&textLarge, 5))
+	textLarge, err := ReadFile(t, "Билет_UTF8.txt")
+	if err != nil {
+		t.Run("test ignore (no open file)", func(t *testing.T) {
+			require.Error(t, err, "не удалось открыть файл")
+		})
+	} else {
+		t.Run("positive test large text", func(t *testing.T) {
+			expected := []string{
+				"гудмэн", "сказал", "мелит", "транай", "транае", "чтобы", "жанна", "гудмэна", "когда", "может", // 4
+			}
+			require.Equal(t, expected, Top10(textLarge, 5))
 
-	})
+		})
+	}
 }
 
-func ReadFile(path string) string {
+func ReadFile(t *testing.T, path string) (string, error) {
 	//path := "Билет_UTF8.fb2"
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
-		fmt.Println(err)
-		return ""
+		//	fmt.Println("Не могу открыть файл",err,t)
+		return "", err
 	}
 	text := string(data)
-	return text
+	return text, nil
 }

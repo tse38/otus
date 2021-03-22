@@ -7,19 +7,11 @@ import (
 	"unicode/utf8"
 )
 
-func Top10(textIn *string, lenMin int) []string {
-	var r []string
-	if len(*textIn) > 150000 {
-		return r
-	} // слишком большой текст
-	if *textIn == "" {
-		return r
-	} // пусто
-
+func clearString(textIn string) string {
 	// Очищаем текст от знаков препинания, переносов и табуляций
 	var textOut strings.Builder // инициализация строки
 	var chPrev rune
-	for _, ch := range *textIn {
+	for _, ch := range textIn {
 		if ch == '.' || ch == ',' || ch == '!' || ch == '"' || ch == ':' || ch == '\n' || ch == '\t' {
 			ch = ' ' // замена знаков препинания на пробел
 		}
@@ -29,9 +21,24 @@ func Top10(textIn *string, lenMin int) []string {
 		chPrev = ch
 	}
 	//  получена строка, очищенная от знаков препинания, переводов строки, табуляций
+	return textOut.String()
+}
+
+func Top10(textIn string, lenMin int) []string {
+	var r []string
+	if len(textIn) > 150000 {
+		return r
+	} // слишком большой текст
+	if textIn == "" {
+		return r
+	} // пусто
+
+	// Очищаем текст от знаков препинания, переносов и табуляций
+	textOut := clearString(textIn)
+	//  получена строка, очищенная от знаков препинания, переводов строки, табуляций
 	//	fmt.Printf("\n%s",textOut.String())
 
-	stroki := strings.Split(textOut.String(), " ") // получаем массив слов
+	stroki := strings.Split(textOut, " ") // получаем массив слов
 
 	// Делаем map  с ключём СЛОВО и значением "количество в тексте"
 	// Тут же отбрасываем "-" как отдельный элемент (слово)
@@ -42,6 +49,8 @@ func Top10(textIn *string, lenMin int) []string {
 		}
 	}
 
+	// С сортировкай map-а по значению параметра проблемы, поэтому переписываем его в структуру.
+	// Вариант сразу писать в нее без использования map-а есть, но реализация сложнее, и в данном случае смысла не имеет
 	type tSortSlovar = struct {
 		slovo string
 		kolvo int
@@ -55,7 +64,7 @@ func Top10(textIn *string, lenMin int) []string {
 		sortSlovar[iNew].kolvo = kolvo
 		iNew++
 	}
-
+	// далее сортируем стандартными средствами, сначала по количеству повторений, потом лексикографически
 	sort.SliceStable(sortSlovar, func(i, j int) bool {
 		if sortSlovar[i].kolvo == sortSlovar[j].kolvo { // здесь упорядочиваем по алфавиту
 			return sortSlovar[i].slovo < sortSlovar[j].slovo
