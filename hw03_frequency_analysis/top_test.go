@@ -1,9 +1,10 @@
 package hw03frequencyanalysis
 
 import (
-	"github.com/stretchr/testify/require"
 	"io/ioutil"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 // Change to true if needed.
@@ -44,7 +45,7 @@ var text = `Как видите, он  спускается  по  лестни�
 		В этот вечер...`
 
 func TestTop10(t *testing.T) {
-	var textNull = ""
+	textNull := ""
 	t.Run("no words in empty string", func(t *testing.T) {
 		require.Len(t, Top10(textNull, 0), 0)
 	})
@@ -82,24 +83,25 @@ func TestTop10(t *testing.T) {
 	})
 
 	// тест большого файла, при этом в подсчете не учитываются слова длиной менее 4 символов
-	textLarge, err := ReadFile(t, "Билет_UTF8.txt")
-	if err != nil {
-		t.Run("test ignore (no open file)", func(t *testing.T) {
-			require.Error(t, err, "не удалось открыть файл")
-		})
-	} else {
-		t.Run("positive test large text", func(t *testing.T) {
-			expected := []string{
-				"гудмэн", "сказал", "мелит", "транай", "транае", "чтобы", "жанна", "гудмэна", "когда", "может", // 4
-			}
-			require.Equal(t, expected, Top10(textLarge, 5))
-
-		})
+	fileName := []string{"Билет_UTF8.txt", "Билет_UTF8.txt2"}
+	for _, fl := range fileName {
+		textLarge, err := ReadFile(t, fl)
+		if err != nil {
+			t.Run("test ignore (no open file)", func(t *testing.T) {
+				require.Error(t, err, "не удалось открыть файл")
+			})
+		} else {
+			t.Run("positive test large text", func(t *testing.T) {
+				expected := []string{
+					"гудмэн", "сказал", "мелит", "транай", "транае", "чтобы", "жанна", "гудмэна", "когда", "может", // 4
+				}
+				require.Equal(t, expected, Top10(textLarge, 5))
+			})
+		}
 	}
 }
 
 func ReadFile(t *testing.T, path string) (string, error) {
-	//path := "Билет_UTF8.fb2"
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		//	fmt.Println("Не могу открыть файл",err,t)
